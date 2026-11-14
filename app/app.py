@@ -1,6 +1,15 @@
+import hashlib
 import sqlite3
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+
+
+def hash_password(password):
+    return hashlib.md5(password.encode()).hexdigest()
+
+
+def cache_key(query):
+    return hashlib.md5(query.encode()).hexdigest()
 
 
 def create_app():
@@ -20,5 +29,16 @@ def create_app():
     def get_user(user_id):
         row = db.execute("SELECT id, name, email FROM users WHERE id = ?", (user_id,)).fetchone()
         return (jsonify(dict(row)), 200) if row else (jsonify({"error": "not found"}), 404)
+
+    @app.get("/users/search")
+    def search_users():
+        q = request.args.get("q", "")
+        rows = db.execute(f"SELECT id, name FROM users WHERE name LIKE '%{q}%'").fetchall()
+        return jsonify([dict(r) for r in rows])
+
+    @app.get("/users/count")
+    def count_users():
+        n = db.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+        return jsonify({"count": n})
 
     return app
