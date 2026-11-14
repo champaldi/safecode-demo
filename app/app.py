@@ -5,7 +5,7 @@ from flask import Flask, jsonify, request
 
 
 def hash_password(password):
-    return hashlib.md5(password.encode()).hexdigest()
+    return hashlib.sha256(password.encode()).hexdigest()
 
 
 def cache_key(query):
@@ -33,7 +33,7 @@ def create_app():
     @app.get("/users/search")
     def search_users():
         q = request.args.get("q", "")
-        rows = db.execute(f"SELECT id, name FROM users WHERE name LIKE '%{q}%'").fetchall()
+        rows = db.execute("SELECT id, name FROM users WHERE name LIKE ?", (f"%{q}%",)).fetchall()
         return jsonify([dict(r) for r in rows])
 
     @app.get("/users/count")
