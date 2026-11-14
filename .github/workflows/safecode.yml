@@ -1,0 +1,23 @@
+name: SafeCode AI
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      # Replace OWNER with the GitHub user/org that hosts the safecode-ai repo.
+      - uses: champaldi/safecode-ai@main
+        with:
+          language: ru
+          fail-on: high
+          api-url: ${{ secrets.SAFECODE_API_URL }}
+          ingest-token: ${{ secrets.SAFECODE_INGEST_TOKEN }}
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
