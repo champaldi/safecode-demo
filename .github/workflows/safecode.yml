@@ -15,9 +15,13 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       # Replace OWNER with the GitHub user/org that hosts the safecode-ai repo.
       - uses: champaldi/safecode-ai@main
+        env:
+          LLM_PRICE_INPUT_PER_1K_KZT: ${{ vars.LLM_PRICE_INPUT_PER_1K_KZT }}
+          LLM_PRICE_OUTPUT_PER_1K_KZT: ${{ vars.LLM_PRICE_OUTPUT_PER_1K_KZT }}
         with:
           language: ru
           fail-on: high
           api-url: ${{ secrets.SAFECODE_API_URL }}
           ingest-token: ${{ secrets.SAFECODE_INGEST_TOKEN }}
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}

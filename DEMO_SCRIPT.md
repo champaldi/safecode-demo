@@ -6,6 +6,16 @@
 - Dry-run output saved in `demo/backup/dryrun-01.md` (regenerate: `python scripts/dryrun.py`). Take screenshots of the summary comment, one inline suggestion, the red check, the green check and the dashboard, and keep them in a slide at the end.
 - Optionally delete `data/safecode.db` first so the dashboard starts at zero.
 
+## 10 minutes before the defence (the tunnel link dies with the laptop)
+1. Start the dashboard and `cloudflared tunnel --url http://localhost:8765`, copy the new `https://....trycloudflare.com` URL.
+2. Update the secret: `gh secret set SAFECODE_API_URL --repo champaldi/safecode-demo --body "<new url>"`.
+3. Sanity check: open the new URL + `/dashboard`.
+4. Do NOT merge any demo PR before the defence. Merging puts the fix into `main`, and patch 01 would no longer apply. Branch protection keeps Merge blocked while the check is red.
+5. Accepted-fix counter only increments if the dashboard already holds the first scan of the live PR, so keep the same dashboard database between the first scan and the live click.
+
+## Links for the examiner
+Public and always open: https://github.com/champaldi/safecode-ai, https://github.com/champaldi/safecode-demo, the demo PRs in `safecode-demo`, plus dashboard screenshots. The live dashboard link only works while the laptop and tunnel are on.
+
 ## Live steps
 | Time | Do | Say / what appears |
 |---|---|---|
